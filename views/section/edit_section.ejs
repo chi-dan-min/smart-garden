@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sửa Vùng Tưới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Sửa Vùng Tưới</h1>
+    <form class="form-common" action="/sections/edit/<%= section.id %>" method="POST">
+        <div>
+            <label for="name">Tên Vùng:</label>
+            <input type="text" id="name" name="name" value="<%= section.name %>" required>
+        </div>
+        <div>
+            <label for="description">Mô Tả:</label>
+            <textarea id="description" name="description"><%= section.description %></textarea>
+        </div>
+        <button type="submit">Lưu Thay Đổi</button>
+        <a class = "btn-cancel" href="/">Hủy</a>
+    </form>
+</body>
+</html>

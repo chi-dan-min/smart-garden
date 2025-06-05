@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản Lý Ngưỡng Tưới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Danh Sách Ngưỡng Tưới</h1>
+    <% if (thresholds.length > 0) { %>
+        <table class="table-common">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cảm biến</th>
+                    <th>Ngưỡng Bật</th>
+                    <th>Ngưỡng Tắt</th>
+                    <th>Hành động quản lý</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% thresholds.forEach(threshold => { %>
+                    <tr>
+                        <td><%= threshold.id %></td>
+                        <td><%= threshold.sensor_name %></td>
+                        <td><%= threshold.on_threshold %></td>
+                        <td><%= threshold.off_threshold %></td>
+
+                        <td>
+                            <a href="/sections/<%= sectionId %>/thresholds/edit/<%= threshold.id %>">Sửa</a> |
+                            <a href="/sections/<%= sectionId %>/thresholds/delete/<%= threshold.id %>" onclick="return confirm('Xác nhận xóa ngưỡng này?')">Xóa</a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+        <% } else { %>
+            <p>Chưa có ngưỡng nào cho vùng này.</p>
+        <% } %>
+
+    <br>
+    <a class="button" href="/sections/<%= sectionId %>/thresholds/add">Thêm Ngưỡng Mới</a>
+    <br><br>
+    <a class="btn-back" href="/">Quay lại danh sách vùng</a>
+</body>
+</html>

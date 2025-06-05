@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lịch Sử Tưới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Lịch Sử Tưới</h1>
+
+    <% if (error) { %>
+        <p class="error"><%= error %></p>
+    <% } %>
+
+    <% if (logs.length > 0) { %>
+        <table class="table-common">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Vùng tưới</th>
+                    <th>Thời gian bắt đầu</th>
+                    <th>Thời lượng (phút)</th>
+                    <th>Loại kích hoạt</th>
+                    <th>Thời điểm tạo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% logs.forEach(log => { %>
+                    <tr>
+                        <td><%= log.id %></td>
+                        <td><%= log.section_name %></td>
+                        <td><%= log.start_time ? log.start_time : '-' %></td>
+                        <td><%= log.duration %></td>
+                        <td><%= log.trigger_type %></td>
+                        <td><%= log.created_at %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Chưa có lịch sử tưới nào.</p>
+    <% } %>
+
+    <a href="/" class="btn-back">← Về trang chủ</a>
+</body>
+</html>

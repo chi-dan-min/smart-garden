@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thêm Loại Cảm Biến</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Thêm Loại Cảm Biến</h1>
+    <% if (error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+
+    <form class="form-common" action="/sensor-types/add" method="POST">
+        <label for="name">Tên loại cảm biến:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="unit">Đơn vị đo:</label><br>
+        <input type="text" id="unit" name="unit"><br><br>
+
+        <button type="submit">Thêm</button>
+        <a class = "btn-cancel" href="/" style="margin-left: 10px;">Hủy</a>
+    </form>
+</body>
+</html>

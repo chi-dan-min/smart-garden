@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thêm Ngưỡng Tưới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Thêm Ngưỡng Tưới</h1>
+
+    <% if (availableSensors.length === 0) { %>
+        <p>Chưa có sensor nào cho vùng này.</p>
+        <a class="button" href="/sections/<%= sectionId %>/sensors">Thêm cảm biến cho vùng</a>
+    <% } else { %>
+        <form class="form-common" action="/sections/<%= sectionId %>/thresholds/add" method="POST">
+            <label for="sensorTypeId">Cảm biến:</label>
+            <select name="sensorTypeId" required>
+                <% availableSensors.forEach(sensor => { %>
+                    <option value="<%= sensor.sensor_type_id %>"><%= sensor.name %></option>
+                <% }) %>
+            </select><br>
+
+            <label for="onThreshold">Ngưỡng BẬT:</label>
+            <input type="number" name="onThreshold" step="any" required><br>
+
+            <label for="offThreshold">Ngưỡng TẮT:</label>
+            <input type="number" name="offThreshold" step="any" required><br>
+            <button type="submit">Thêm Ngưỡng</button>
+        </form>
+    <% } %>
+
+    <a class="btn-back" href="/sections/<%= sectionId %>/thresholds">Quay lại</a>
+</body>
+</html>

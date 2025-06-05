@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sửa Ngưỡng Tưới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Sửa Ngưỡng Tưới</h1>
+    <form class="form-common" action="/sections/<%= sectionId %>/thresholds/edit/<%= threshold.id %>" method="POST">
+        <div>
+            <label for="sensorTypeId">Chọn cảm biến:</label>
+            <select name="sensorTypeId" id="sensorTypeId" required>
+                <% if (availableSensors.length > 0) { %>
+                    <% availableSensors.forEach(sensor => { %>
+                        <option value="<%= sensor.sensor_type_id %>" 
+                            <%= threshold.sensor_type_id === sensor.sensor_type_id ? 'selected' : '' %>>
+                            <%= sensor.name %>
+                        </option>
+                    <% }); %>
+                <% } else { %>
+                    <option disabled>Không có cảm biến nào khả dụng.</option>
+                <% } %>
+            </select>
+        </div>
+
+        <div>
+            <label for="onThreshold">Ngưỡng BẬT:</label>
+            <input type="number" id="onThreshold" name="onThreshold" value="<%= threshold.on_threshold %>" step="any" required><br>
+
+            <label for="offThreshold">Ngưỡng TẮT:</label>
+            <input type="number" id="offThreshold" name="offThreshold" value="<%= threshold.off_threshold %>" step="any" required><br>
+
+        </div>   
+        <button type="submit">Lưu Thay Đổi</button>
+        <a class = "btn-cancel" href="/sections/<%= sectionId %>/thresholds">Hủy</a>
+    </form>
+</body>
+
+</html>

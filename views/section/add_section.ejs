@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Vùng Tưới Mới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Thêm Vùng Tưới Mới</h1>
+    <form class="form-common" action="/sections/add" method="POST">
+        <div>
+            <label for="name">Tên Vùng:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="description">Mô Tả:</label>
+            <textarea id="description" name="description"></textarea>
+        </div>
+        <button type="submit">Thêm</button>
+        <a class = "btn-cancel" href="/">Hủy</a>
+    </form>
+</body>
+</html>

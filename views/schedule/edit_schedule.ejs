@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sửa Lịch trình Tưới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Sửa Lịch trình Tưới</h1>
+    <form class="form-common" action="/sections/<%= sectionId %>/schedules/edit/<%= schedule.id %>" method="POST">
+        <div>
+            <label for="startTime">Thời gian bắt đầu:</label>
+            <input type="time" id="startTime" name="startTime" value="<%= schedule.start_time %>" required>
+        </div>
+        <div>
+            <label for="duration">Thời lượng tưới (phút):</label>
+            <input type="number" id="duration" name="duration" min="1" value="<%= schedule.duration %>" required>
+        </div>
+        <div>
+            <label for="repeatRule">Lặp lại:</label>
+            <select name="repeatRule" id="repeatRule">
+                <option value="daily" <%= schedule.repeat_rule === 'daily' ? 'selected' : '' %>>Hàng ngày</option>
+
+                <option value="specific_days" <%= schedule.repeat_rule === 'specific_days' ? 'selected' : '' %>>Các ngày cụ thể</option>
+            </select>
+        </div>
+        <div id="daysOfWeekContainer" style="<%= schedule.repeat_rule === 'specific_days' ? 'display: block;' : 'display: none;' %>">
+            <label>Chọn ngày trong tuần:</label><br>
+            <input type="checkbox" name="daysOfWeek" value="2" <%= schedule.days_of_week && schedule.days_of_week.includes('2') ? 'checked' : '' %>> Thứ Hai
+            <input type="checkbox" name="daysOfWeek" value="3" <%= schedule.days_of_week && schedule.days_of_week.includes('3') ? 'checked' : '' %>> Thứ Ba
+            <input type="checkbox" name="daysOfWeek" value="4" <%= schedule.days_of_week && schedule.days_of_week.includes('4') ? 'checked' : '' %>> Thứ Tư
+            <input type="checkbox" name="daysOfWeek" value="5" <%= schedule.days_of_week && schedule.days_of_week.includes('5') ? 'checked' : '' %>> Thứ Năm
+            <input type="checkbox" name="daysOfWeek" value="6" <%= schedule.days_of_week && schedule.days_of_week.includes('6') ? 'checked' : '' %>> Thứ Sáu
+            <input type="checkbox" name="daysOfWeek" value="7" <%= schedule.days_of_week && schedule.days_of_week.includes('7') ? 'checked' : '' %>> Thứ Bảy
+            <input type="checkbox" name="daysOfWeek" value="8" <%= schedule.days_of_week && schedule.days_of_week.includes('8') ? 'checked' : '' %>> Chủ Nhật
+        </div>
+        <div>
+            <label for="isActive">Kích hoạt:</label>
+            <input type="checkbox" id="isActive" name="isActive" <%= schedule.is_active ? 'checked' : '' %>>
+        </div>
+        <button type="submit">Lưu Thay Đổi</button>
+        <a class = "btn-cancel" href="/sections/<%= sectionId %>/schedules">Hủy</a>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const repeatRuleSelect = document.getElementById('repeatRule');
+            const daysOfWeekContainer = document.getElementById('daysOfWeekContainer');
+            const dayCheckboxes = daysOfWeekContainer.querySelectorAll('input[type="checkbox"]');
+            const form = document.querySelector('form');
+            const daysOfWeekInput = document.querySelector('input[name="daysOfWeek"]'); // Trường daysOfWeek trong form
+    
+            // Hàm cập nhật hiển thị và giá trị repeatRule dựa vào số ngày đã chọn
+            function updateRepeatRuleFromCheckboxes() {
+                const checkedCount = [...dayCheckboxes].filter(cb => cb.checked).length;
+    
+                if (checkedCount === 7) {
+                    repeatRuleSelect.value = 'daily';
+                    daysOfWeekContainer.style.display = 'none';
+                } else {
+                    repeatRuleSelect.value = 'specific_days';
+                    daysOfWeekContainer.style.display = 'block';
+                }
+            }
+    
+            // Sự kiện khi thay đổi repeatRule
+            repeatRuleSelect.addEventListener('change', () => {
+                if (repeatRuleSelect.value === 'specific_days') {
+                    daysOfWeekContainer.style.display = 'block';
+                } else {
+                    // Gán là daily → tự động check tất cả
+                    dayCheckboxes.forEach(cb => cb.checked = true);
+                    daysOfWeekContainer.style.display = 'none';
+                }
+            });
+    
+            // Sự kiện khi tick từng checkbox ngày
+            dayCheckboxes.forEach(cb => {
+                cb.addEventListener('change', updateRepeatRuleFromCheckboxes);
+            });
+    
+            // Kiểm tra khi submit form
+            form.addEventListener('submit', (e) => {
+                if (repeatRuleSelect.value === 'specific_days') {
+                    const checkedCount = [...dayCheckboxes].filter(cb => cb.checked).length;
+                    if (checkedCount === 0) {
+                        alert('Bạn phải chọn ít nhất một ngày trong tuần.');
+                        e.preventDefault();
+                        return;
+                    }
+                }
+                // Không cần làm gì nếu chọn 'daily' vì đã cập nhật daysOfWeek trong updateRepeatRuleFromCheckboxes
+            });
+    
+            // Khởi tạo khi trang tải
+            updateRepeatRuleFromCheckboxes();
+        });
+    </script>
+        
+</body>
+</html>

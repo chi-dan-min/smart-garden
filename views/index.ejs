@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Tưới Cây Tự Động</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/script.js" defer></script> <!-- Chú ý thêm 'defer' -->
+</head>
+<body>
+    <h1>Hệ Thống Tưới Cây Tự Động</h1>
+
+    <!-- Các tab navigation -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="showTab('sections-tab')">Vùng Tưới</button>
+        <button class="tab-btn" onclick="showTab('sensor-types-tab')">Loại Cảm Biến</button>
+        <button class="tab-btn" onclick="showTab('irrigation-logs-tab')">Lịch Sử Tưới</button>
+    </div>
+
+    <!-- Nội dung cho các tab -->
+    <div id="sections-tab" class="tab-content active">
+        <h2>Các Vùng Tưới</h2>
+        <a class="button" href="/sections/add">+ Thêm Vùng Tưới Mới</a>
+
+        <% if (error) { %>
+            <p class="error"><%= error %></p>
+        <% } %>
+
+        <div class="sections-container">
+            <% if (sections && sections.length > 0) { %>
+                <% sections.forEach(function(section) { %>
+                    <div class="section-card">
+                        <h3><%= section.name %></h3>
+                        <p><%= section.description %></p>
+                         <!-- Form chọn chế độ điều khiển -->
+                        <form action="/sections/<%= section.id %>/mode" method="POST">
+                        <label>Chế độ điều khiển:</label>
+                        <select name="mode" onchange="this.form.submit()" id="mode-<%= section.id %>" data-section-id="<%= section.id %>">
+                            <option value="manual" <%= section.mode === 'manual' ? 'selected' : '' %>>Thủ công</option>
+                            <option value="threshold" <%= section.mode === 'threshold' ? 'selected' : '' %>>Theo ngưỡng</option>
+                            <option value="schedule" <%= section.mode === 'schedule' ? 'selected' : '' %>>Theo lịch</option>
+                        </select>
+                        </form>
+
+                        <!-- Công tắc toggle khi chọn "manual" -->
+                        <div id="manual-control-<%= section.id %>" class="manual-toggle" style="display: none;">
+                        <label>Bật/Tắt van tưới:</label>
+                        <label class="switch">
+                            <input type="checkbox" onchange="togglePump(<%= section.id %>, this.checked)">
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+
+                        <div class="section-actions">
+                            <a href="/sections/edit/<%= section.id %>">Sửa</a>
+                            <a href="/sections/delete/<%= section.id %>" onclick="return confirm('Bạn có chắc chắn muốn xóa vùng này?')">Xóa</a>
+                            <a href="/sections/<%= section.id %>/sensors">Cảm biến</a>
+                            <a href="/sections/<%= section.id %>/schedules">Lịch trình</a>
+                            <a href="/sections/<%= section.id %>/thresholds">Ngưỡng</a>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Chưa có vùng tưới nào.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div id="sensor-types-tab" class="tab-content">
+        <h2>Loại Cảm Biến</h2>
+        <a class="button" href="/sensor-types/add">+ Thêm Loại Cảm Biến</a>
+
+        <div class="sensor-types-container">
+            <% if (sensorTypes && sensorTypes.length > 0) { %>
+                <% sensorTypes.forEach(function(sensor) { %>
+                    <div class="sensor-card">
+                        <h4><%= sensor.name %></h4>
+                        <p>Đơn vị: <%= sensor.unit %></p>
+                        <p>Ngày tạo: <%= sensor.created_at ? new Date(sensor.created_at).toLocaleDateString() : '' %></p>
+                        <div class="sensor-actions">
+                            <a href="/sensor-types/edit/<%= sensor.id %>">Sửa</a>
+                            <a href="/sensor-types/delete/<%= sensor.id %>" onclick="return confirm('Bạn có chắc muốn xóa loại cảm biến này?')">Xóa</a>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p>Chưa có loại cảm biến nào.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <div id="irrigation-logs-tab" class="tab-content active">
+        <h2>Lịch Sử Tưới</h2>
+        
+        <div id="irrigation-logs-brief" style="margin-bottom: 12px;">
+            <!-- Nội dung tóm tắt lịch sử tưới sẽ được JS nạp vào đây -->
+        </div>
+
+        <a href="/logs" class="btn-back">Xem tất cả lịch sử tưới →</a>
+    </div>
+
+
+    <script src="/public/js/script.js"></script>
+</body>
+</html>

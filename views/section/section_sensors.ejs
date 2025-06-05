@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý Cảm biến</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <h1>Quản lý Cảm biến</h1>
+    <h2>Các cảm biến đã gán</h2>
+    <% if (assignedSensors.length > 0) { %>
+        <table class="table-common">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Tên cảm biến</th>
+                    <th>Đơn vị</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% assignedSensors.forEach(sensor => { %>
+                    <tr>
+                        <td><%= sensor.id %></td>
+                        <td><%= sensor.sensor_name %></td>
+                        <td><%= sensor.unit %></td>
+                        <td><a href="/sections/<%= sectionId %>/sensors/delete/<%= sensor.id %>" onclick="return confirm('Bạn có chắc chắn muốn xóa cảm biến này?')">Xóa</a></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>Chưa có cảm biến nào được gán cho vùng này.</p>
+    <% } %>
+
+    <h2>Thêm cảm biến</h2>
+    <form class="form-common" action="/sections/<%= sectionId %>/sensors/add" method="POST">
+        <div>
+            <label for="sensorTypeId">Chọn loại cảm biến:</label>
+            <select name="sensorTypeId" id="sensorTypeId" required>
+                <% if (allSensorTypes.length > 0) { %>
+                    <% allSensorTypes.forEach(sensorType => { %>
+                        <option value="<%= sensorType.id %>"><%= sensorType.name %> (<%= sensorType.unit %>)</option>
+                    <% }); %>
+                <% } else { %>
+                    <option disabled>Không có loại cảm biến nào.</option>
+                <% } %>
+            </select>
+        </div>
+        <button type="submit">Thêm cảm biến</button>
+    </form>
+    <a class="btn-back" class="button" href="/">Về trang chủ</a>
+</body>
+</html>
